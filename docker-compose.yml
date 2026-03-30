@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: mongo_quanlichitieu
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-admin123}
+      MONGO_INITDB_DATABASE: quanlychitieu
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_quanlichitieu
+    restart: always
+    ports:
+      - "${BACKEND_PORT:-5000}:5000"
+    environment:
+      PORT: 5000
+      DB_URL: mongodb://${DB_USER:-admin}:${DB_PASSWORD:-admin123}@mongodb:27017/quanlychitieu?authSource=admin
+      APP_NAME: ${APP_NAME:-Quan Ly Chi Tieu}
+      NODE_ENV: production
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_quanlichitieu
+    restart: always
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      REACT_APP_API_URL: "http://backend:5000/api"
+      REACT_APP_APP_NAME: ${APP_NAME:-Quan Ly Chi Tieu}
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/build:/app/build
+
+volumes:
+  mongodb_data:
+
+networks:
+  default:
+    name: quanlichitieu_network
