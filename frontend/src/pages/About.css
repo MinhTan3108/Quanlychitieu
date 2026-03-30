@@ -1,0 +1,51 @@
+.about-container {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.about-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.about-card h2 {
+  color: #2c3e50;
+  margin-top: 0;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 1rem;
+}
+
+.student-info,
+.app-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.info-row label {
+  font-weight: 600;
+  color: #34495e;
+  min-width: 150px;
+}
+
+.info-row span {
+  color: #2c3e50;
+  flex: 1;
+  word-break: break-word;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #95a5a6;
+  font-size: 1.1rem;
+}
