@@ -33,10 +33,7 @@ function Navigation() {
         </Link>
         <ul className="navbar-menu">
           <li>
-            <Link to="/">🏠 Trang Chủ</Link>
-          </li>
-          <li>
-            <Link to="/about">ℹ️ Thông Tin</Link>
+            <Link to="/">ℹ️ Thông Tin Sinh Viên</Link>
           </li>
           <li className={`health-status ${healthStatus}`}>
             <span className="status-indicator"></span>
